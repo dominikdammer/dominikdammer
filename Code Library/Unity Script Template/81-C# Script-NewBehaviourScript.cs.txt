@@ -1,0 +1,40 @@
+
+/// <copyright> (c) Company Name 2021 </copyright>
+/// <author> (c) Dominik Dammer </author>
+/// <url> http://dominik-dammer.de/ </url>
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+    #region enum
+
+    #endregion enum
+
+    #ROOTNAMESPACEBEGIN#
+public class #SCRIPTNAME# : MonoBehaviour
+{
+    #region serialized fields
+
+    #endregion serialized fields
+
+    #region fields
+
+    #endregion fields
+
+    #region properties
+
+    #endregion properties
+
+    #region initialization and shutdown
+
+    #endregion initialization and shutdown
+
+    #region handling
+
+    #endregion handling
+
+
+}
+#ROOTNAMESPACEEND#
+
