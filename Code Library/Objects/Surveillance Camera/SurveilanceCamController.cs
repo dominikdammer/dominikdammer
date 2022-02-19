@@ -7,10 +7,6 @@ using UnityEngine;
 
 public class SurveilanceCamController : MonoBehaviour
 {
-    #region serialized fields
-
-    #endregion serialized fields
-
     #region fields
     [Header("Look for")]
     public Transform target;
@@ -46,10 +42,8 @@ public class SurveilanceCamController : MonoBehaviour
         }
         else if(startNextRotation && !rotRight)
         {
-            StartCoroutine(Rotate(-yaw, secondsToRot));
-            
+            StartCoroutine(Rotate(-yaw, secondsToRot));          
         }
-
     }
 
     #endregion initialization and shutdown
@@ -82,8 +76,7 @@ public class SurveilanceCamController : MonoBehaviour
     {
         if (rotRight)
         {
-            transform.localRotation = Quaternion.AngleAxis(-yaw / 2, Vector3.up) ;
-            
+            transform.localRotation = Quaternion.AngleAxis(-yaw / 2, Vector3.up) ;            
         }
         else
         {

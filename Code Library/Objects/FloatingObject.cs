@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections;
  
 // Makes objects float up & down while gently spinning.
-public class Floater : MonoBehaviour
+public class FloatingObject : MonoBehaviour
 {
     // User Inputs
     public float degreesPerSecond = 15.0f;

@@ -1,30 +1,42 @@
-/// <copyright> (c) Out of the box 2021 </copyright>
+/// <copyright> (c) Out of the box 2022 </copyright>
 /// <author> (c) Dominik Dammer </author>
 /// <url> http://dominik-dammer.de/ </url>
 
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SurveilanceDetection : MonoBehaviour
 {
-    #region serialized fields
-
-    #endregion serialized fields
+    //#region serialized fields
+    //[Header("Audio")]
+    //[SerializeField]
+    //private EventReference EventReferenceRotate;
+    //[SerializeField]
+    //private EventReference EventReferenceAlarm;
+    //[SerializeField]
+    //private EventReference EventReferenceDetectionOn;
+    //[SerializeField]
+    //private EventReference EventReferenceDetectionOff;
+    //#endregion serialized fields
 
     #region fields
-    // [Header("NAME1")]
+
+    [Header("Material")]
     public Material searchingMat, spottedMat;
 
     string playerTag;
-    bool follow;
     public Light spotlight;
+    public Transform alarm;
 
     Transform detector;
+
 
     [Header("Trigger ID")]
     public int id;
 
+    //private FMOD.Studio.EventInstance Alarminstance;
     #endregion fields
 
     #region initialization and shutdown
@@ -33,27 +45,32 @@ public class SurveilanceDetection : MonoBehaviour
     {
         detector = transform.parent.GetComponent<Transform>();
         playerTag = GameObject.FindGameObjectWithTag("Player").tag;
-        Debug.Log(playerTag);
-        
     }
-
-
 
     #endregion initialization and shutdown
 
     #region handling
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (hit.collider.gameObject.tag == playerTag)
-    //    {
-    //        GameEvents.Instance.TriggerOn(id);
-    //    }
-            
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        Vector3 direction = other.transform.position - detector.position;
+        RaycastHit hit;
+
+        if (Physics.Raycast(detector.transform.position, direction.normalized, out hit, 1000))
+        {
+            if (hit.collider.gameObject.tag == playerTag)
+            {
+                GameEvents.Instance.TriggerOn(id);
+
+                //FMODUnity.RuntimeManager.PlayOneShot(EventReferenceDetectionOn);
+            }
+        }
+
+    }
 
     private void OnTriggerStay(Collider other)
     {
+
         if (other.gameObject.tag == playerTag)
         {
             Vector3 direction = other.transform.position - detector.position;
@@ -62,19 +79,17 @@ public class SurveilanceDetection : MonoBehaviour
             //what happens on detection of player
             if (Physics.Raycast(detector.transform.position, direction.normalized, out hit, 1000))
             {
-                //Debug.Log(hit.collider.name);
+                Debug.DrawRay(detector.transform.position, direction.normalized * 1000, Color.cyan);
 
                 if (hit.collider.gameObject.tag == playerTag)
                 {
-                    detector.GetComponentInParent<MeshRenderer>().material = spottedMat;
+                    alarm.GetComponentInParent<MeshRenderer>().material = spottedMat;
                     transform.parent.LookAt(other.transform);
                     spotlight.color = Color.red;
-                    
-
                 }
                 else
                 {
-                    detector.GetComponentInParent<MeshRenderer>().material = searchingMat;
+                    alarm.GetComponentInParent<MeshRenderer>().material = searchingMat;
                 }
             }
         }
@@ -85,8 +100,11 @@ public class SurveilanceDetection : MonoBehaviour
     {
         if(other.transform.tag == playerTag)
         {
-            detector.GetComponentInParent<MeshRenderer>().material = searchingMat;
+            alarm.GetComponentInParent<MeshRenderer>().material = searchingMat;
             spotlight.color = Color.white;
+            GameEvents.Instance.TriggerOff(id);
+
+            //FMODUnity.RuntimeManager.PlayOneShot(EventReferenceDetectionOff);
 
         }
     }
